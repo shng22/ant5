@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="comment">
+
+	<select id="comments" parameterType="Map" resultType="Map">
+		SELECT
+		*
+		FROM
+		review_view WHERE bno=#{no }
+	</select>
+
+	<delete id="cdel" parameterType="Map">
+		DELETE FROM review
+		WHERE
+		bno=#{bno } AND rno=#{rno } AND member_no=#{no }
+	</delete>
+
+	<insert id="commentsInsert" parameterType="Map">
+		INSERT INTO review
+		(member_no, bno, r_content, member_nickname,r_rate)
+		VALUES(#{member_no
+		}, #{no
+		}, #{comment}, #{member_nickname},#{rating})
+	</insert>
+
+	<update id="update" parameterType="Map">
+		update review set
+		r_content=#{r_content} where bno=#{bno} and rno=#{rno}
+	</update>
+
+	<select id="get" parameterType="String" resultType="ReviewDTO">
+		select * from
+		review_view where bno=#{bno} and rno=#{rno};
+	</select>
+
+</mapper>

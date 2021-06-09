@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="board">
+
+	<select id="list" parameterType="Map" resultType="Map">
+		SELECT * FROM
+		boardview
+	</select>
+
+	<select id="list2" parameterType="Map" resultType="Map">
+		SELECT * FROM
+		boardview order by average DESC limit 6;
+	</select>
+
+	<select id="list3" parameterType="Map" resultType="Map">
+		SELECT * FROM
+		boardview order by views DESC limit 6;
+	</select>
+
+	<select id="boardList" parameterType="Map" resultType="Map">
+		SELECT *
+		FROM boardview LIMIT #{startPage }, #{lastPage }
+	</select>
+
+	<select id="boardListCount" resultType="Integer">
+		SELECT count(*) as count
+		FROM boardview
+	</select>
+
+	<select id="detail" parameterType="Integer" resultType="Map">
+		SELECT *
+		FROM boardview WHERE bno=#{no}
+	</select>
+
+	<insert id="write" parameterType="BoardDTO">
+		INSERT INTO board (member_no,
+		title,
+		content, actor, genre, runtime, rundate, grade, type, file)
+		VALUES
+		(#{member_no}, #{title},
+		#{content}, #{actor}, #{genre},
+		#{runtime}, #{rundate},
+		#{grade},
+		#{type}, #{file})
+	</insert>
+
+	<select id="update" parameterType="BoardDTO"
+		resultType="BoardDTO">
+		SELECT * FROM boardview
+		WHERE bno=#{bno} AND
+		member_no=#{member_no}
+	</select>
+
+	<update id="update2" parameterType="Map">
+		UPDATE board SET
+		title=#{title }, content=#{content }, actor=#{actor},
+		genre=#{genre},
+		runtime=#{runtime}, rundate=#{rundate},
+		grade=#{grade}, type=#{type}
+		WHERE bno=#{bno }
+		AND
+		member_no=#{no }
+	</update>
+
+	<delete id="delete" parameterType="Map">
+		DELETE FROM board WHERE
+		bno=#{bno } AND member_no=#{no }
+	</delete>
+
+	<update id="views" parameterType="Integer">
+		update board set
+		views=views+1
+		where bno=#{no}
+	</update>
+
+
+
+	<select id="getBoardList" parameterType="Map" resultType="MAP">
+
+		SELECT * FROM boardview
+
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+
+			<if test="searchType=='title'">
+				AND title like CONCAT('%', #{keyword}, '%')
+			</if>
+
+			<if test="searchType=='content'">
+				AND content like CONCAT('%', #{keyword}, '%')
+			</if>
+			<if test="searchType=='genre'">
+				AND genre like CONCAT('%', #{keyword}, '%')
+			</if>
+
+		</trim>
+	</select>
+
+
+
+	<select id="getBoardListCnt" resultType="int">
+
+		SELECT
+
+		count(*) as listCnt
+
+		FROM
+
+		boardview
+
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+
+			<if test="keyword != null and keyword != '' ">
+
+				<if test="searchType=='title'">
+
+					AND title like CONCAT('%', #{keyword}, '%')
+
+				</if>
+
+				<if test="searchType=='content'">
+
+					AND content like CONCAT('%', #{keyword}, '%')
+
+				</if>
+
+				<if test="searchType=='genre'">
+
+					AND genre like CONCAT('%', #{keyword}, '%')
+
+				</if>
+
+			</if>
+
+		</trim>
+
+	</select>
+
+	<delete id="delete1" parameterType="Integer">
+		DELETE FROM member WHERE
+		member_no=#{no }
+	</delete>
+
+</mapper>

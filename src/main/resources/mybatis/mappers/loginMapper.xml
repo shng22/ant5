@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="login">
+
+
+	<select id="email" parameterType="String" resultType="LoginDTO">
+		SELECT
+		member_email, member_name
+		FROM member
+		WHERE member_email =#{email}
+	</select>
+
+	<select id="login" parameterType="LoginDTO"
+		resultType="LoginDTO">
+		SELECT *
+		FROM member
+		where member_email=#{member_email} AND
+		member_pw=#{member_pw}
+	</select>
+
+	<select id="endlogin" parameterType="LoginDTO"
+		resultType="LoginDTO">
+		SELECT *
+		FROM member
+		WHERE member_email=#{member_email} AND
+		member_pw=#{member_pw}
+
+	</select>
+	<insert id="join1" parameterType="Map">
+		INSERT INTO member
+		(member_name, member_id, member_nickname ,member_pw
+		,member_cp
+		,member_email)
+		VALUES ( #{member_name}, #{member_id},
+		#{member_nickname}, #{member_pw},
+		#{member_cp}, #{member_email})
+
+	</insert>
+
+	<select id="idck" parameterType="String" resultType="Integer">
+		SELECT
+		COUNT(*)
+		FROM member
+		WHERE member_id = #{member_id}
+
+	</select>
+
+	<select id="nick" parameterType="String" resultType="Integer">
+		SELECT
+		COUNT(*)
+		FROM member
+		WHERE member_nickname = #{member_nickname}
+
+	</select>
+	<select id="cp" parameterType="LoginDTO" resultType="LoginDTO">
+		SELECT *
+		FROM
+		member
+		where member_cp=#{cp}
+	</select>
+
+	<select id="cp2" parameterType="LoginDTO" resultType="LoginDTO">
+		SELECT
+		member_email , member_id
+		FROM member
+		WHERE member_nickname =
+		#{member_nickname}
+	</select>
+
+	<select id="pwem" parameterType="String" resultType="LoginDTO">
+		SELECT*
+		FROM
+		member
+		WHERE member_email =#{member_email}
+	</select>
+
+	<select id="detail" resultType="Map">
+		select * from memberview
+	</select>
+
+	<update id="update3" parameterType="LoginDTO">
+		UPDATE member SET
+		member_nickname=#{member_nickname }, member_pw=#{member_pw },
+		member_cp=#{member_cp },
+		member_email=#{member_email }
+		WHERE
+		member_no=#{member_no }
+	</update>
+
+	<select id="view" parameterType="Integer" resultType="LoginDTO">
+		select *
+		from member where member_no=#{no};
+	</select>
+
+
+</mapper>

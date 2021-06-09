@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="log">
+	
+	<select id="logList" parameterType="Map" resultType="Map">
+		SELECT (
+		SELECT count(*) FROM logview WHERE lno > 0
+		<if test="search != null">
+			AND letc like CONCAT('%', #{search }, '%')
+		</if> 
+		<if test="name != null">
+			AND lname like CONCAT('%', #{name }, '%') 
+		</if>
+		<if test="lcate != null"> AND lcate = #{lcate } </if>
+		<if test="lip != null"> AND lip = #{lip } </if>
+		) as count, logview.* 
+		FROM logview WHERE lno > 0
+		<if test="search != null">
+			AND letc like CONCAT('%', #{search }, '%')
+		</if> 
+		<if test="name != null">
+			AND lname like CONCAT('%', #{name }, '%') 
+		</if>
+		<if test="lcate != null"> AND lcate = #{lcate } </if>
+		<if test="lip != null"> AND lip = #{lip } </if>
+		ORDER BY ldate DESC 
+		LIMIT #{startPage }, #{lastPage }
+	</select>
+	
+	<select id="logListCount" resultType="Integer">
+		SELECT COUNT(*) FROM log
+	</select>
+	
+	<select id="select01" resultType="Map">
+		SELECT lcate, lcatename, COUNT(*) as count 
+		FROM logview GROUP BY lcate
+	</select>
+	
+</mapper>
